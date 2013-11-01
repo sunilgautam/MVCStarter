@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Welcome to NetBlogger";
+}
+
+<div class="container">
+    <h3 style="text-align: center;">Welcome to NetBlogger</h3>
+    @{
+        NetBlogger.Infrastructure.Utility.Functions func = new NetBlogger.Infrastructure.Utility.Functions();
+    }
+
+    <h3>@func.HumanReadableDateTimeDiff(DateTime.Now.AddDays(- 5))</h3>
+    <h3>@func.HumanReadableDateTimeDiff(DateTime.Now.AddDays(- 7))</h3>
+    <h3>@func.HumanReadableDateTimeDiff(DateTime.Now.AddDays(- 14))</h3>
+
+    <h4>@Html.HumanReadableDateTimeDiff("p", null, DateTime.Now.AddDays(- 14))</h4>
+</div>

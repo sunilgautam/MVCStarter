@@ -1,0 +1,35 @@
+﻿@using PagedList.Mvc
+@model IEnumerable<NetBlogger.Models.User>
+
+@{
+    ViewBag.Title = "Paging";
+}
+
+<h2>Paging</h2>
+
+<table class="table table-striped" border="0" cellpadding="0" cellspacing="0">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Login)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>
+                @user.UserId
+            </td>
+            <td>
+                @user.Login
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+@Html.PagedListPager((PagedList.StaticPagedList<NetBlogger.Models.User>)ViewBag.OnePageOfUsers, page => Url.Action("Paging", "Home", new { page = page }))

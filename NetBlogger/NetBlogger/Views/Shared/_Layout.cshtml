@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title</title>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/Content/application.css" rel="stylesheet" />
+        @RenderSection("styles", required: false)
+    </head>
+    <body>
+        <div class="container">
+             <!-- Static navbar -->
+            <div class="navbar navbar-default">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">Net Blogger</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="/">Home</a></li>
+                        <li><a href="/post">Posts</a></li>
+                        <li><a href="/user">Users</a></li>
+                    </ul>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </div>
+        
+        @RenderBody()
+
+        <footer>
+            <div class="container">
+                <hr />
+                <p>&copy; Company 2013</p>
+            </div>
+        </footer>
+
+        <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+        <script src="~/Content/bootstrap/js/bootstrap.min.js"></script>
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

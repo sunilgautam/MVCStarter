@@ -1,0 +1,39 @@
+﻿body
+{
+    /*background: #525252;*/
+}
+
+a
+{
+    text-decoration: none;
+}
+
+a:hover
+{
+    text-decoration: none;
+}
+
+#wrapper
+{
+    
+}
+
+.bor
+{
+    border: solid 1px red;
+}
+
+.field-validation-error
+{
+    color: Red;
+}
+
+.validation-summary-errors
+{
+    color: Red;
+}
+
+.mce-fullscreen .mce-stack-layout
+{
+    margin-top: 55px;
+}

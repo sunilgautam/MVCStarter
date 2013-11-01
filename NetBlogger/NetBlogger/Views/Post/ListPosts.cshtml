@@ -1,0 +1,31 @@
+﻿@model IEnumerable<NetBlogger.Models.Post>
+
+@{
+    ViewBag.Title = "Posts";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            @foreach (var item in Model)
+            {
+                <!-- blog entry -->
+                <h1><a href="@Url.Action("Display", "Post", new { id = @item.PostId })">@item.Title</a></h1>
+                <p class="lead">by @Html.ActionLink(@item.Author.Login, "Details", "User", new { id = item.Author.UserId }, null)</p>
+                <hr />
+                <p><span class="glyphicon glyphicon-time"></span> Posted on @item.UpdateDate.ToString("dddd, MMM d, yyyy, hh:mm tt zzz")</p>
+                <hr />
+                <p>This is a very basic starter template for a blog homepage. It makes use of Glyphicons that are built into Bootstrap 3, and it makes use of the Pager at the bottom of the page. Make sure you get the Glyphicons files by downloading the entire <code>/fonts</code> directory that you can download in the source files or at <a href="http://getbootstrap.com">getbootstrap.com</a>. That directory has all of the web fonts in it which makes Glyphicons work.</p>
+                <a class="btn btn-primary" href="@Url.Action("Display", "Post", new { id = @item.PostId })">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <hr />
+            }
+                
+            <!-- pager -->
+            <ul class="pager">
+                <li class="previous"><a href="#">&larr; Older</a></li>
+                <li class="next"><a href="#">Newer &rarr;</a></li>
+            </ul>
+
+        </div>
+    </div>
+</div>

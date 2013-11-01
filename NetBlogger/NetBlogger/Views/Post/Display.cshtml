@@ -1,0 +1,24 @@
+﻿@model NetBlogger.Models.Post
+
+@{
+    ViewBag.Title = @Model.Title;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div>
+                <h1>@Model.Title</h1>
+                <hr />
+            </div>
+            <div>
+                @Html.Raw(Model.Content)
+            </div>
+            <div>
+                <hr />
+                <p><span class="glyphicon glyphicon-time"></span> Posted on @Model.UpdateDate.ToString("dddd, MMM d, yyyy, hh:mm tt zzz") by @Html.ActionLink(@Model.Author.Login, "Details", "User", new { id = Model.Author.UserId }, null)</p>
+                <hr />
+            </div>
+        </div>
+    </div>
+</div>
