@@ -1,0 +1,45 @@
+ALTER PROCEDURE [dbo].[Proc_Generic_Select]
+(
+    @Table NVARCHAR(128),
+    @Columns NVARCHAR(MAX) = '',
+    @Conditions NVARCHAR(MAX) = '',
+    @Orderby NVARCHAR(MAX),
+    @Skip INT = 0,
+    @Take INT = 0
+)
+AS
+BEGIN
+    DECLARE @SQL NVARCHAR(MAX)
+    IF @Columns = ''
+    BEGIN
+        SET @Columns = '*'
+    END
+    
+    IF @Take = 0
+    BEGIN
+        SET @SQL = 'SELECT ' + @Columns + ' FROM ' + @Table
+    END
+    ELSE
+    BEGIN
+        SET @SQL = 'SELECT * FROM (SELECT ' + @Columns + ' , ROW_NUMBER() OVER (ORDER BY ' + @Orderby + ') AS ROW_NUM FROM ' + @Table
+    END
+    
+    IF @Conditions <> ''
+    BEGIN
+        SET @SQL += ' WHERE ' + @Conditions
+    END
+    
+    IF @Take = 0
+    BEGIN
+        SET @SQL += ' ORDER BY ' + @Orderby
+    END
+    ELSE
+    BEGIN
+        SET @SQL += ' ) AS QUERY WHERE QUERY.ROW_NUM BETWEEN ' + CONVERT(nvarchar(5), (@Skip + 1)) + ' AND ' + CONVERT(nvarchar(5), (@Skip + @Take))
+    END
+    
+    PRINT @SQL
+    EXEC (@SQL)
+END
+
+GO

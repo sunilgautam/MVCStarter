@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Dapper;
+using System.Data;
 
 namespace NetBlogger.Domain.Concrete
 {
@@ -16,7 +17,7 @@ namespace NetBlogger.Domain.Concrete
             try
             {
                 db.Open();
-                IEnumerable<Post> posts = db.Query<Post>("Select * from posts ORDER BY PostId DESC");
+                IEnumerable<Post> posts = db.Query<Post>("Proc_Generic_Select", new { Table = "Posts" }, commandType: CommandType.StoredProcedure);
                 return posts;
             }
             catch (Exception ex)
@@ -34,17 +35,18 @@ namespace NetBlogger.Domain.Concrete
             try
             {
                 db.Open();
-                IEnumerable<Post> posts = db.Query<Post>(@"
-                                                        SELECT * FROM 
-                                                        (
-	                                                        SELECT	*,
-			                                                        ROW_NUMBER() OVER (ORDER BY @sort) AS ROW_NUM
-	                                                        FROM	Posts
-                                                            WHERE   @searchfield = @searchvalue
-                                                        ) 
-                                                        AS QUERY
-                                                        WHERE QUERY.ROW_NUM BETWEEN @lower AND @higher
-                                                        ", new { @lower = skip.Value + 1, @higher = skip.Value + take.Value, @sort = sort, @searchfield = string.IsNullOrEmpty(searchfield) ? "1" : searchfield, @searchvalue = string.IsNullOrEmpty(searchvalue) ? "1" : searchvalue, @sunil = "123" });
+                IEnumerable<Post> posts = db.Query<Post>("Proc_Generic_Select", new { Table = "Posts", Columns = "*", Conditions = searchfield, Orderby = sort, Skip = skip.Value, Take = take.Value }, commandType: CommandType.StoredProcedure);
+//                IEnumerable<Post> posts = db.Query<Post>(@"
+//                                                        SELECT * FROM 
+//                                                        (
+//	                                                        SELECT	*,
+//			                                                        ROW_NUMBER() OVER (ORDER BY @sort) AS ROW_NUM
+//	                                                        FROM	Posts
+//                                                            WHERE   @searchfield = @searchvalue
+//                                                        ) 
+//                                                        AS QUERY
+//                                                        WHERE QUERY.ROW_NUM BETWEEN @lower AND @higher
+//                                                        ", new { @lower = skip.Value + 1, @higher = skip.Value + take.Value, @sort = sort, @searchfield = string.IsNullOrEmpty(searchfield) ? "1" : searchfield, @searchvalue = string.IsNullOrEmpty(searchvalue) ? "1" : searchvalue, @sunil = "123" });
                 return posts;
             }
             catch (Exception ex)

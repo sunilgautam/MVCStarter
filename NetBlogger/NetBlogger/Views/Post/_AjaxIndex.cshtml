@@ -43,4 +43,5 @@
     }
 
 </table>
-@Html.PagedListPager((StaticPagedList<NetBlogger.Models.Post>)ViewBag.PagedModel, page => Url.Action("Index", "Post", new { page = page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing("tableContainer"))
+@*@Html.PagedListPager((StaticPagedList<NetBlogger.Models.Post>)ViewBag.PagedModel, page => Url.Action("Index", "Post", new { page = page }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing("tableContainer"))*@
+@Html.PagedListPager((StaticPagedList<NetBlogger.Models.Post>)ViewBag.PagedModel, page => Url.Action("Index", "Post", new { page = page }))
