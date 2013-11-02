@@ -29,6 +29,52 @@ namespace NetBlogger.Domain.Concrete
             }
         }
 
+        public IEnumerable<Post> GetAll(int? skip, int? take, string sort, string searchfield, string searchvalue)
+        {
+            try
+            {
+                db.Open();
+                IEnumerable<Post> posts = db.Query<Post>(@"
+                                                        SELECT * FROM 
+                                                        (
+	                                                        SELECT	*,
+			                                                        ROW_NUMBER() OVER (ORDER BY @sort) AS ROW_NUM
+	                                                        FROM	Posts
+                                                            WHERE   @searchfield = @searchvalue
+                                                        ) 
+                                                        AS QUERY
+                                                        WHERE QUERY.ROW_NUM BETWEEN @lower AND @higher
+                                                        ", new { @lower = skip.Value + 1, @higher = skip.Value + take.Value, @sort = sort, @searchfield = string.IsNullOrEmpty(searchfield) ? "1" : searchfield, @searchvalue = string.IsNullOrEmpty(searchvalue) ? "1" : searchvalue, @sunil = "123" });
+                return posts;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                db.Close();
+            }
+        }
+
+        public int Count()
+        {
+            try
+            {
+                db.Open();
+                int c = db.Query<int>("Select count(1) from posts").FirstOrDefault();
+                return c;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                db.Close();
+            }
+        }
+
         public IEnumerable<Post> GetAllWithAuthors()
         {
             try

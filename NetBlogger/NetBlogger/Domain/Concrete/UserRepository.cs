@@ -29,6 +29,51 @@ namespace NetBlogger.Domain.Concrete
             }
         }
 
+        public IEnumerable<User> GetAll(int? skip, int? take)
+        {
+            try
+            {
+                db.Open();
+                IEnumerable<User> users = db.Query<User>(@"
+                                                        SELECT TOP (@take) * FROM 
+                                                        (
+	                                                        SELECT	*,
+			                                                        ROW_NUMBER() OVER (ORDER BY UserId) AS ROW_NUM
+	                                                        FROM	Users
+                                                        ) 
+                                                        AS QUERY
+                                                        WHERE QUERY.ROW_NUM > @skip
+                                                        ORDER BY QUERY.UserId DESC", new { @take = take.Value, @skip = skip.Value });
+                return users;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                db.Close();
+            }
+        }
+
+        public int Count()
+        {
+            try
+            {
+                db.Open();
+                int c = db.Query<int>("Select count(1) from users").FirstOrDefault();
+                return c;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                db.Close();
+            }
+        }
+
         public User GetById(int user_id)
         {
             try

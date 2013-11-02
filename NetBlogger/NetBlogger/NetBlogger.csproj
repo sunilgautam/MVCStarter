@@ -492,6 +492,7 @@
     <Content Include="Views\Post\Display.cshtml" />
     <Content Include="Views\Post\ListPosts.cshtml" />
     <Content Include="Views\Home\Paging.cshtml" />
+    <Content Include="Views\Post\_AjaxIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

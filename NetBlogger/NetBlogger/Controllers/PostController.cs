@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using NetBlogger.Models;
-using NetBlogger.Infrastructure;
 using NetBlogger.Domain.Abstract;
 using NetBlogger.ViewModels;
 using NetBlogger.Infrastructure.Utility;
+using PagedList;
 
 namespace NetBlogger.Controllers
 {
@@ -27,9 +24,26 @@ namespace NetBlogger.Controllers
         //
         // GET: /Post/
 
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            return View(postRepository.GetAll());
+            int total = postRepository.Count();
+            int pageIndex = (page ?? 1) - 1;
+            int pageSize = 2;
+
+            IEnumerable<Post> posts = postRepository.GetAll((pageIndex * pageSize), pageSize, "PostId DESC", null, null);
+            var modelAsIPagedList = new StaticPagedList<Post>(posts, pageIndex + 1, pageSize, total);
+
+            ViewBag.PagedModel = modelAsIPagedList;
+
+
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_AjaxIndex", posts);
+            }
+            else
+            {
+                return View(posts);
+            }
         }
 
         //
